@@ -5,6 +5,7 @@ class EntitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Entity
         fields = (
+            'id',
             'releventnews',
             'entity',
             'timestamp',
@@ -15,9 +16,11 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = (
+            "id",
             "title",
             "sentiment",
             'timestamp',
+            "entities4thisnews",
         )
 
     def create(self, validated_data):
