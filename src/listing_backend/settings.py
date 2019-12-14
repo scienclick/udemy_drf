@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # my apps
-    "propertypost"
+    "propertypost",
+    "news",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +77,7 @@ WSGI_APPLICATION = 'listing_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'nnews2',
+        'NAME': 'hhome8',
         'USER': 'postgres',
         'PASSWORD': 'jhk1128f',
         'HOST': '127.0.0.1',
