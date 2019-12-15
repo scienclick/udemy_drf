@@ -11,6 +11,19 @@ serializer.save()
 serializer.validated_data
 
 
+data = {
+    "title": "London is great city,but is not as good as Newyork",
+    "sentiment": "pn",
+    "entities4thisnews": [
+
+        {
+            "entity": "London",
+        },
+        {
+            "entity": "Newyork",
+        }
+    ]
+}
 
 serializer = NewsSerializer(data=data)
 serializer.is_valid()
