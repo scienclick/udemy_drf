@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
     path("", include('news.urls')),
+    path("", include('propertypost.urls')),
 ]
