@@ -20,3 +20,7 @@ class PropPostSerializer(serializers.HyperlinkedModelSerializer):
             'updated',
         )
 
+        read_only_fields = [
+            'viewnum',
+            'pricepermeter',
+        ]

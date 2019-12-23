@@ -86,3 +86,11 @@ r = requests.post(ROOT+POSTS_ENDPOINT, data=json.dumps(data), headers=headers)
 r.text
 r.content
 r.status_code
+
+
+#testing a filter
+ROOT="http://127.0.0.1:8000/"
+GETALL_endpoint="prop-posts/?type=&from_timestamp_date=&to_timestamp_date=&min_buyingprice=30000&max_buyingprice=75000"
+r = requests.get(ROOT+GETALL_endpoint, headers=headers)
+r.status_code
+r.content
