@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     # my apps
     "propertypost",
     "news",
+    "users",
 ]
+AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,7 +83,7 @@ WSGI_APPLICATION = 'listing_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'hhome8',
+        'NAME': 'hhome10',
         'USER': 'postgres',
         'PASSWORD': 'jhk1128f',
         'HOST': '127.0.0.1',

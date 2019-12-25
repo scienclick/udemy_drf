@@ -9,6 +9,9 @@ from django_filters import DateTimeFilter, NumberFilter
 from propertypost.serializers import ImageSerializer
 from propertypost.models import Image
 
+from propertypost import custompermission
+from rest_framework import permissions
+
 class IntegerListFilter(filters.Filter):
     def filter(self,qs,value):
         if value not in (None,''):
@@ -51,6 +54,10 @@ class PropertyPostList(generics.ListCreateAPIView):
     search_fields = (
         'description',
     )
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        custompermission.IsCurrentUserOwnerOrReadOnly,
+    )
 
     def perform_create(self, serializer):
         try:
@@ -60,13 +67,17 @@ class PropertyPostList(generics.ListCreateAPIView):
         except:
             priceperarea = 0
             pass
-        serializer.save(pricepermeter=priceperarea)
+        serializer.save(owner=self.request.user, pricepermeter=priceperarea)
 
 
 class PropertyPostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PropertyPost.objects.all()
     serializer_class = PropPostSerializer
     name = 'propertypost-detail'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        custompermission.IsCurrentUserOwnerOrReadOnly,
+    )
 
     def get(self, request, *args, **kwargs):
         propertypost_object = self.get_object()
@@ -89,9 +100,17 @@ class ImageList(generics.ListCreateAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
     name = 'image-list'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        custompermission.ImagePermission,
+    )
 
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
     name = 'image-detail'
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+        custompermission.ImagePermission,
+    )

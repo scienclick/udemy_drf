@@ -1,8 +1,13 @@
 from django.db import models
 import uuid
 import datetime
+from django.contrib.auth import get_user_model
 
 class PropertyPost(models.Model):
+    owner = models.ForeignKey(
+        get_user_model(),
+        related_name='posts4thisowner',
+        on_delete=models.CASCADE)
 
     condoorhouse_choices = [('APARTMENT', 'Apartment'), ('HOUSE', 'House'), ('COMMERCIAL', 'Commercial'),
                             ('LAND', 'Land')]
