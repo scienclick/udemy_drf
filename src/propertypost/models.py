@@ -1,5 +1,6 @@
 from django.db import models
-
+import uuid
+import datetime
 
 class PropertyPost(models.Model):
 
@@ -19,3 +20,21 @@ class PropertyPost(models.Model):
 
     class Meta:
         ordering = ('-timestamp',)
+
+
+
+def upload_update_image(instance, filename):
+    extension = filename.split(".")[-1]
+    house = instance.id
+    print(house)
+    return "myposts/{}/{}.{}".format(datetime.datetime.today().year,
+                                     datetime.datetime.now().strftime("%Y%m%d%H%M%S") + "_" +
+                                     str(uuid.uuid4()), extension)
+
+class Image(models.Model):
+    prop_post = models.ForeignKey(
+        PropertyPost,
+        related_name='images4thisproperty',
+        on_delete=models.CASCADE)
+
+    photo = models.ImageField(upload_to=upload_update_image, null=True, blank=True,default="")

@@ -94,3 +94,26 @@ GETALL_endpoint="prop-posts/?type=&from_timestamp_date=&to_timestamp_date=&min_b
 r = requests.get(ROOT+GETALL_endpoint, headers=headers)
 r.status_code
 r.content
+
+# testing sending photos
+root = "http://127.0.0.1:8000/"
+POSTS_ENDPOINT = root + "images/"
+img_path1 = r"C:\Users\ashamsa\Desktop\a.jpg"
+img_path2 = r"C:\Users\ashamsa\Desktop\b.jpg"
+
+data = {
+    "prop_post": 8,
+}
+headers = {
+    # "Content-Type": "application/json",
+}
+
+# post
+r = requests.post(POSTS_ENDPOINT, data=data, files={'photo': open(img_path1, 'rb')}, headers=headers)
+
+# put
+data = {
+    "prop_post": 5,
+}
+POSTS_ENDPOINT = root + "images/4"
+r = requests.patch(POSTS_ENDPOINT, data=data, files={'photo': open(img_path1, 'rb')}, headers=headers)

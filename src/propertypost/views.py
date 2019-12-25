@@ -6,6 +6,9 @@ from django.utils import timezone
 from django_filters import rest_framework as filters
 from django_filters import DateTimeFilter, NumberFilter
 
+from propertypost.serializers import ImageSerializer
+from propertypost.models import Image
+
 class IntegerListFilter(filters.Filter):
     def filter(self,qs,value):
         if value not in (None,''):
@@ -80,3 +83,15 @@ class PropertyPostDetail(generics.RetrieveUpdateDestroyAPIView):
             priceperarea = 0
             pass
         serializer.save(pricepermeter=priceperarea, updated=timezone.now())
+
+
+class ImageList(generics.ListCreateAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+    name = 'image-list'
+
+
+class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer
+    name = 'image-detail'
