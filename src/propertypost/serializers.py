@@ -36,6 +36,9 @@ class PropPostSerializer(serializers.HyperlinkedModelSerializer):
 
             'viewnum',
             'pricepermeter',
+            'lat',
+            'lon',
+            'location',
 
             'images4thisproperty',
 
@@ -46,6 +49,7 @@ class PropPostSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = [
             'viewnum',
             'pricepermeter',
+            'location',
         ]
 
 

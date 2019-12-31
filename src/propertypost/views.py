@@ -12,6 +12,9 @@ from propertypost.models import Image
 from propertypost import custompermission
 from rest_framework import permissions
 
+from django.contrib.gis.geos import GEOSGeometry,Point
+from django.contrib.gis.measure import Distance
+
 class IntegerListFilter(filters.Filter):
     def filter(self,qs,value):
         if value not in (None,''):
@@ -60,15 +63,34 @@ class PropertyPostList(generics.ListCreateAPIView):
     )
 
     def perform_create(self, serializer):
+        lat = serializer.initial_data['lat']
+        long = serializer.initial_data['lon']
+        pnt = 'POINT(' + str(long) + ' ' + str(lat) + ')'
         try:
             price = serializer.initial_data['buyingprice']
             square = serializer.initial_data['square']
             priceperarea = round(float(price) / float(square), 2)
+
+
         except:
             priceperarea = 0
             pass
-        serializer.save(owner=self.request.user, pricepermeter=priceperarea)
+        serializer.save(owner=self.request.user, pricepermeter=priceperarea, location=pnt)
 
+    def get_queryset(self):
+        polystr = self.request.query_params.get('poly', None)
+        diststr = self.request.query_params.get('dist', None)
+        if polystr:
+            poly = GEOSGeometry('SRID=4326;' + polystr)
+            qs = PropertyPost.objects.filter(location__contained=poly)
+            return qs
+        if diststr:
+            long=float(diststr.split(',')[1])
+            lat=float(diststr.split(',')[0])
+            rad=float(diststr.split(',')[2])
+            pnt = Point(long, lat)
+            qs = PropertyPost.objects.filter(location__distance_lt=(pnt,Distance(km=rad)))
+            return qs
 
 class PropertyPostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = PropertyPost.objects.all()
@@ -86,6 +108,10 @@ class PropertyPostDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get(request, *args, **kwargs)
 
     def perform_update(self, serializer):
+        lat = serializer.initial_data['lat']
+        long = serializer.initial_data['lon']
+        pnt = 'POINT(' + str(long) + ' ' + str(lat) + ')'
+
         try:
             price = serializer.initial_data['buyingprice']
             square = serializer.initial_data['square']
@@ -93,7 +119,7 @@ class PropertyPostDetail(generics.RetrieveUpdateDestroyAPIView):
         except:
             priceperarea = 0
             pass
-        serializer.save(pricepermeter=priceperarea, updated=timezone.now())
+        serializer.save(pricepermeter=priceperarea, updated=timezone.now(), location=pnt)
 
 
 class ImageList(generics.ListCreateAPIView):

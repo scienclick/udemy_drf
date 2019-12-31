@@ -1,4 +1,5 @@
-from django.db import models
+# from django.db import models
+from django.contrib.gis.db import models
 import uuid
 import datetime
 from django.contrib.auth import get_user_model
@@ -22,6 +23,12 @@ class PropertyPost(models.Model):
 
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=True)
+
+    lat = models.FloatField(verbose_name="Lat.", default=0, blank=True, null=True)
+    lon = models.FloatField(verbose_name="Long.", default=0, blank=True, null=True)
+    location = models.PointField(null=True, blank=True)
+
+
 
     class Meta:
         ordering = ('-timestamp',)
